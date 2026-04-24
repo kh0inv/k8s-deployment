@@ -1,0 +1,4 @@
+{
+  "appType": "helm",
+  "valuesFile": "values-prod.yaml"
+}
