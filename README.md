@@ -55,9 +55,9 @@ In the `deployments\argo-cd` create `.argocd-config.json` that contains the Argo
 }
 ```
 
-At the root of git repo, create a `appset.yaml` file
+At the root of git repo, create a `argocd-appset.yaml` file
 
 Apply the yaml file
 ```
-kubectl apply -f appset.yaml -n argocd
+kubectl apply -f argocd-appset.yaml -n argocd
 ```
