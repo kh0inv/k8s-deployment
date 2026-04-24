@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd-appset
+  namespace: argocd
+spec:
+  goTemplate: true 
+  generators:
+    - git:
+        repoURL: 'https://github.com/kh0inv/k8s-deployment.git'
+        revision: HEAD
+        files:
+          - path: "deployments/**/.argocd-config.json"
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: '{{ default "default" .project }}'
+      source:
+        repoURL: 'https://github.com/kh0inv/k8s-deployment.git'
+        targetRevision: main
+        path: '{{.path.dir}}' 
+        # yaml-language-server-disable Implicit map keys need to be followed by map values
+        {{if eq (default "directory" .appType) "helm"}}
+        helm:
+          valueFiles:
+            - '{{.valuesFile}}'
+        # yaml-language-server-disable Map
+        {{end}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ default .path.basename .namespace }}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

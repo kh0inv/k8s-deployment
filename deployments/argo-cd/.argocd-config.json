@@ -1,0 +1,5 @@
+{
+  "appType": "helm",
+  "valuesFile": "values-dev.yaml",
+  "namespace": "argocd"
+}
